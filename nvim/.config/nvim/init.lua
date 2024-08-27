@@ -239,6 +239,12 @@ require('lazy').setup({
 
   -- "gc" to comment visual regions/lines
   { 'numToStr/Comment.nvim', opts = {} },
+  {
+    'mrjones2014/smart-splits.nvim',
+    opts = {
+      lazy = false,
+    },
+  },
 
   -- Here is a more advanced example where we pass configuration
   -- options to `gitsigns.nvim`. This is equivalent to the following Lua:
@@ -747,18 +753,31 @@ require('lazy').setup({
   --   end,
   -- },
   {
-    'maxmx03/solarized.nvim',
-    lazy = false,
-    priority = 1000,
+    'savq/melange-nvim',
     config = function()
-      vim.o.background = 'light' -- or 'light'
-
-      vim.cmd.colorscheme 'solarized'
-      require('solarized').setup {
-        transparent = true,
-      }
+      vim.opt.termguicolors = true
+      vim.opt.background = 'light'
+      vim.cmd.colorscheme 'melange'
     end,
   },
+  -- {
+  --   'shaunsingh/nord.nvim',
+  --   lazy = false,
+  --   priority = 1000,
+  -- },
+  -- {
+  --   'maxmx03/solarized.nvim',
+  --   lazy = false,
+  --   priority = 1000,
+  --   config = function()
+  --     vim.o.background = 'light' -- or 'light'
+  --
+  --     vim.cmd.colorscheme 'solarized'
+  --     require('solarized').setup {
+  --       transparent = true,
+  --     }
+  --   end,
+  -- },
   -- Highlight todo, notes, etc in comments
   { 'folke/todo-comments.nvim', event = 'VimEnter', dependencies = { 'nvim-lua/plenary.nvim' }, opts = { signs = false } },
 
