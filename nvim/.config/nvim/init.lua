@@ -275,6 +275,8 @@ require('lazy').setup({
     },
   },
 
+  { 'f-person/git-blame.nvim' },
+
   -- Here is a more advanced example where we pass configuration
   -- options to `gitsigns.nvim`. This is equivalent to the following Lua:
   --    require('gitsigns').setup({ ... })
@@ -632,7 +634,6 @@ require('lazy').setup({
       }
     end,
   },
-
   { -- Autoformat
     'stevearc/conform.nvim',
     opts = {
@@ -658,7 +659,7 @@ require('lazy').setup({
       },
     },
   },
-
+  { 'prettier/vim-prettier' },
   { -- Autocompletion
     'hrsh7th/nvim-cmp',
     event = 'InsertEnter',
