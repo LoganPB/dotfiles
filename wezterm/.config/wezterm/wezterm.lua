@@ -1,23 +1,5 @@
 local wezterm = require("wezterm")
 config = wezterm.config_builder()
-function get_appearance()
-	if wezterm.gui then
-		return wezterm.gui.get_appearance()
-	end
-	return "Dark"
-end
-function scheme_for_appearance(appearance)
-	if appearance:find("Dark") then
-		return "Sakura"
-	else
-		return "Unikitty Light (base16)"
-	end
-end
-
-local function is_vim(pane)
-	-- this is set by the plugin, and unset on ExitPre in Neovim
-	return pane:get_user_vars().IS_NVIM == "true"
-end
 
 local direction_keys = {
 	Left = "h",
@@ -30,6 +12,13 @@ local direction_keys = {
 	k = "Up",
 	l = "Right",
 }
+
+local function is_vim(pane)
+	local process_info = pane:get_foreground_process_info()
+	local process_name = process_info and process_info.name
+
+	return process_name == "nvim" or process_name == "vim"
+end
 
 local function split_nav(resize_or_move, key)
 	return {
@@ -52,9 +41,25 @@ local function split_nav(resize_or_move, key)
 	}
 end
 
+local function get_appearance()
+	if wezterm.gui then
+		return wezterm.gui.get_appearance()
+	end
+	return "Dark"
+end
+
+local function scheme_for_appearance(appearance)
+	if appearance:find("Dark") then
+		return "Sakura"
+	else
+		return "Unikitty Light (base16)"
+	end
+end
+
 config = {
 	automatically_reload_config = true,
 	enable_tab_bar = true,
+	tab_bar_at_bottom = true,
 	window_close_confirmation = "NeverPrompt",
 	window_decorations = "RESIZE",
 	default_cursor_style = "BlinkingBar",
@@ -65,12 +70,12 @@ config = {
 	keys = {
 		{
 			mods = "LEADER",
-			key = "-",
+			key = "v",
 			action = wezterm.action.SplitVertical({ domain = "CurrentPaneDomain" }),
 		},
 		{
 			mods = "LEADER",
-			key = "=",
+			key = "h",
 			action = wezterm.action.SplitHorizontal({ domain = "CurrentPaneDomain" }),
 		},
 		{
@@ -89,6 +94,11 @@ config = {
 			action = wezterm.action.PaneSelect({
 				mode = "SwapWithActive",
 			}),
+		},
+		{
+			mods = "LEADER",
+			key = "w",
+			action = wezterm.action.CloseCurrentPane({ confirm = true }),
 		},
 		-- move between split panes
 		split_nav("move", "h"),

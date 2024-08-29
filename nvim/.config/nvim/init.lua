@@ -225,6 +225,35 @@ vim.opt.rtp:prepend(lazypath)
 --
 -- NOTE: Here is where you install your plugins.
 require('lazy').setup({
+  {
+    'letieu/wezterm-move.nvim',
+    keys = { -- Lazy loading, don't need call setup() function
+      {
+        '<C-h>',
+        function()
+          require('wezterm-move').move 'h'
+        end,
+      },
+      {
+        '<C-j>',
+        function()
+          require('wezterm-move').move 'j'
+        end,
+      },
+      {
+        '<C-k>',
+        function()
+          require('wezterm-move').move 'k'
+        end,
+      },
+      {
+        '<C-l>',
+        function()
+          require('wezterm-move').move 'l'
+        end,
+      },
+    },
+  },
   -- NOTE: Plugins can be added with a link (or for a github repo: 'owner/repo' link).
   'tpope/vim-sleuth', -- Detect tabstop and shiftwidth automatically
 
