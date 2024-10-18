@@ -185,38 +185,17 @@ require('lazy').setup({
 
   -- Personal plugin
   {
-    'dinhhuy258/git.nvim',
+    'ldelossa/gh.nvim',
+    dependencies = {
+      {
+        'ldelossa/litee.nvim',
+        config = function()
+          require('litee.lib').setup()
+        end,
+      },
+    },
     config = function()
-      require('git').setup {
-        default_mappings = true, -- NOTE: `quit_blame` and `blame_commit` are still merged to the keymaps even if `default_mappings = false`
-
-        keymaps = {
-          -- Open blame window
-          blame = '<Leader>gb',
-          -- Close blame window
-          quit_blame = 'q',
-          -- Open blame commit
-          blame_commit = '<CR>',
-          -- Quit blame commit
-          quit_blame_commit = 'q',
-          -- Open file/folder in git repository
-          browse = '<Leader>gio',
-          -- Open pull request of the current branch
-          open_pull_request = '<Leader>gip',
-          -- Create a pull request with the target branch is set in the `target_branch` option
-          create_pull_request = '<Leader>gin',
-          -- Opens a new diff that compares against the current index
-          diff = '<Leader>gid',
-          -- Close git diff
-          diff_close = '<Leader>giD',
-          -- Revert to the specific commit
-          revert = '<Leader>gir',
-          -- Revert the current file to the specific commit
-          revert_file = '<Leader>giR',
-        },
-        -- Default target branch when create a pull request
-        target_branch = 'master',
-      }
+      require('litee.gh').setup()
     end,
   },
   {
@@ -226,12 +205,8 @@ require('lazy').setup({
       require('conform').setup {
         formatters_by_ft = {
           lua = { 'stylua' },
-          -- Conform will run multiple formatters sequentially
-          python = { 'isort', 'black' },
-          -- You can customize some of the format options for the filetype (:help conform.format)
-          rust = { 'rustfmt', lsp_format = 'fallback' },
-          -- Conform will run the first available formatter
-          javascript = { 'prettierd', 'prettier', stop_after_first = true },
+          javascript = { 'prettierd', 'prettier' },
+          typescript = { 'prettierd', 'prettier' },
         },
         format_on_save = {
           -- These options will be passed to conform.format()
@@ -277,18 +252,18 @@ require('lazy').setup({
   { -- Useful plugin to show you pending keybinds.
     'folke/which-key.nvim',
     event = 'VimEnter', -- Sets the loading event to 'VimEnter'
-    config = function() -- This is the function that runs, AFTER loading
-      require('which-key').setup()
-
-      -- Document existing key chains
-      require('which-key').register {
-        ['<leader>c'] = { name = '[C]ode', _ = 'which_key_ignore' },
-        ['<leader>d'] = { name = '[D]ocument', _ = 'which_key_ignore' },
-        ['<leader>r'] = { name = '[R]ename', _ = 'which_key_ignore' },
-        ['<leader>s'] = { name = '[S]earch', _ = 'which_key_ignore' },
-        ['<leader>w'] = { name = '[W]orkspace', _ = 'which_key_ignore' },
-      }
-    end,
+    keys = {
+      { '<leader>c', group = '[C]ode' },
+      { '<leader>c_', hidden = true },
+      { '<leader>d', group = '[D]ocument' },
+      { '<leader>d_', hidden = true },
+      { '<leader>r', group = '[R]ename' },
+      { '<leader>r_', hidden = true },
+      { '<leader>s', group = '[S]earch' },
+      { '<leader>s_', hidden = true },
+      { '<leader>w', group = '[W]orkspace' },
+      { '<leader>w_', hidden = true },
+    },
   },
 
   -- NOTE: Plugins can specify dependencies.
@@ -787,30 +762,46 @@ require('lazy').setup({
     end,
   },
 
-  { -- You can easily change to a different colorscheme.
-    -- Change the name of the colorscheme plugin below, and then
-    -- change the command in the config to whatever the name of that colorscheme is.
-    --
-    -- If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`.
-    'folke/tokyonight.nvim',
-    priority = 1000, -- Make sure to load this before all the other start plugins.
-    init = function()
-      -- Load the colorscheme here.
-      -- Like many other themes, this one has different styles, and you could load
-      -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
-      vim.cmd.colorscheme 'tokyonight-night'
-
-      -- You can configure highlights by doing something like:
-      vim.cmd.hi 'Comment gui=none'
+  -- { -- You can easily change to a different colorscheme.
+  --   -- Change the name of the colorscheme plugin below, and then
+  --   -- change the command in the config to whatever the name of that colorscheme is.
+  --   --
+  --   -- If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`.
+  --   'folke/tokyonight.nvim',
+  --   priority = 1000, -- Make sure to load this before all the other start plugins.
+  --   init = function()
+  --     -- Load the colorscheme here.
+  --     -- Like many other themes, this one has different styles, and you could load
+  --     -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
+  --     vim.cmd.colorscheme 'tokyonight-night'
+  --
+  --     -- You can configure highlights by doing something like:
+  --     vim.cmd.hi 'Comment gui=none'
+  --   end,
+  -- },
+  {
+    'scottmckendry/cyberdream.nvim',
+    lazy = false,
+    priority = 1000,
+    config = function()
+      require('cyberdream').setup {
+        transparent = true,
+        italic_comments = true,
+        hide_fillchars = true,
+        terminal_colors = false,
+        cache = true,
+        borderless_telescope = { border = false, style = 'flat' },
+        theme = { variant = 'light' },
+      }
     end,
   },
   -- {
-  --   'savq/melange-nvim',
-  --   config = function()
-  --     vim.opt.termguicolors = true
-  --     vim.opt.background = 'light'
-  --     vim.cmd.colorscheme 'melange'
-  --   end,
+  -- 'savq/melange-nvim',
+  -- config = function()
+  --   vim.opt.termguicolors = true
+  --   vim.opt.background = 'light'
+  --   vim.cmd.colorscheme 'melange'
+  -- end,
   -- },
   -- {
   --   'shaunsingh/nord.nvim',
