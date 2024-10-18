@@ -1,4 +1,5 @@
 local wezterm = require("wezterm")
+local cyberdream = require("cyberdream-light")
 config = wezterm.config_builder()
 
 local direction_keys = {
@@ -52,7 +53,8 @@ local function scheme_for_appearance(appearance)
 	if appearance:find("Dark") then
 		return "Sakura"
 	else
-		return "Unikitty Light (base16)"
+		-- return "Unikitty Light (base16)"
+		return "cyberdream"
 	end
 end
 
