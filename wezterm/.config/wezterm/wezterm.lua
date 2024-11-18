@@ -50,12 +50,13 @@ local function get_appearance()
 end
 
 local function scheme_for_appearance(appearance)
-	if appearance:find("Dark") then
-		return "Sakura"
-	else
-		-- return "Unikitty Light (base16)"
-		return "cyberdream"
-	end
+	return "Sakura"
+	-- if appearance:find("Dark") then
+	-- 	return "Sakura"
+	-- else
+	-- 	-- return "Unikitty Light (base16)"
+	-- 	return "cyberdream"
+	-- end
 end
 
 config = {
@@ -100,6 +101,11 @@ config = {
 		{
 			mods = "LEADER",
 			key = "w",
+			action = wezterm.action.CloseCurrentPane({ confirm = true }),
+		},
+		{
+			mods = "LEADER",
+			key = "q",
 			action = wezterm.action.CloseCurrentPane({ confirm = true }),
 		},
 		-- move between split panes
