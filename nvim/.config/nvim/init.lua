@@ -185,6 +185,9 @@ require('lazy').setup({
 
   -- Personal plugin
   {
+    'github/copilot.vim',
+  },
+  {
     'ldelossa/gh.nvim',
     dependencies = {
       {
@@ -207,6 +210,7 @@ require('lazy').setup({
           lua = { 'stylua' },
           javascript = { 'prettierd', 'prettier' },
           typescript = { 'prettierd', 'prettier' },
+          yaml = { 'prettierd', 'prettier' },
         },
         format_on_save = {
           -- These options will be passed to conform.format()
@@ -762,39 +766,46 @@ require('lazy').setup({
     end,
   },
 
-  -- { -- You can easily change to a different colorscheme.
-  --   -- Change the name of the colorscheme plugin below, and then
-  --   -- change the command in the config to whatever the name of that colorscheme is.
-  --   --
-  --   -- If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`.
-  --   'folke/tokyonight.nvim',
-  --   priority = 1000, -- Make sure to load this before all the other start plugins.
+  { -- You can easily change to a different colorscheme.
+    --   -- Change the name of the colorscheme plugin below, and then
+    --   -- change the command in the config to whatever the name of that colorscheme is.
+    --   --
+    --   -- If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`.
+    'folke/tokyonight.nvim',
+    priority = 1000, -- Make sure to load this before all the other start plugins.
+    init = function()
+      -- Load the colorscheme here.
+      -- Like many other themes, this one has different styles, and you could load
+      -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
+      vim.cmd.colorscheme 'tokyonight-night'
+
+      -- You can configure highlights by doing something like:
+      vim.cmd.hi 'Comment gui=none'
+    end,
+  },
+  -- { 'catppuccin/nvim', name = 'catppuccin', lazy = false, priority = 1000 },
+  -- {
+  --   'scottmckendry/cyberdream.nvim',
+  --   lazy = false,
+  --   priority = 1000,
   --   init = function()
   --     -- Load the colorscheme here.
   --     -- Like many other themes, this one has different styles, and you could load
   --     -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
-  --     vim.cmd.colorscheme 'tokyonight-night'
+  --     vim.cmd.colorscheme 'cyberdream'
   --
   --     -- You can configure highlights by doing something like:
   --     vim.cmd.hi 'Comment gui=none'
   --   end,
+  --   config = function()
+  --     require('cyberdream').setup {
+  --       borderless_telescope = false,
+  --       theme = {
+  --         variant = 'light',
+  --       },
+  --     }
+  --   end,
   -- },
-  {
-    'scottmckendry/cyberdream.nvim',
-    lazy = false,
-    priority = 1000,
-    config = function()
-      require('cyberdream').setup {
-        transparent = true,
-        italic_comments = true,
-        hide_fillchars = true,
-        terminal_colors = false,
-        cache = true,
-        borderless_telescope = { border = false, style = 'flat' },
-        theme = { variant = 'light' },
-      }
-    end,
-  },
   -- {
   -- 'savq/melange-nvim',
   -- config = function()
