@@ -100,6 +100,15 @@ config = {
 			key = "w",
 			action = wezterm.action.CloseCurrentPane({ confirm = true }),
 		},
+		-- Alt + Flèche Gauche
+		{ key = "LeftArrow", mods = "ALT", action = wezterm.action({ SendString = "\x1bb" }) },
+		-- Alt + Flèche Droite
+		{ key = "RightArrow", mods = "ALT", action = wezterm.action({ SendString = "\x1bf" }) },
+
+		-- Ctrl + b (Backward word)
+		{ key = "b", mods = "CTRL", action = wezterm.action({ SendString = "\x1bb" }) },
+		-- Ctrl + f (Forward word)
+		{ key = "f", mods = "CTRL", action = wezterm.action({ SendString = "\x1bf" }) },
 		-- move between split panes
 		split_nav("move", "h"),
 		split_nav("move", "j"),
