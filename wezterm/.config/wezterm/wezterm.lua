@@ -112,6 +112,10 @@ config = {
 		{ key = "b", mods = "CTRL", action = wezterm.action({ SendString = "\x1bb" }) },
 		-- Ctrl + f (Forward word)
 		{ key = "f", mods = "CTRL", action = wezterm.action({ SendString = "\x1bf" }) },
+
+		-- Clean current line
+		{ key = "Backspace", mods = "SHIFT", action = wezterm.action({ SendString = "\x15" }) },
+
 		-- move between split panes
 		split_nav("move", "h"),
 		split_nav("move", "j"),

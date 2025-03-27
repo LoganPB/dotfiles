@@ -211,6 +211,7 @@ require('lazy').setup({
           javascript = { 'prettierd', 'prettier' },
           typescript = { 'prettierd', 'prettier' },
           yaml = { 'prettierd', 'prettier' },
+          typescriptreact = { 'prettierd' },
         },
         format_on_save = {
           -- These options will be passed to conform.format()
@@ -237,7 +238,18 @@ require('lazy').setup({
       },
     },
   },
-
+  {
+    'pwntester/octo.nvim',
+    requires = {
+      'nvim-lua/plenary.nvim',
+      'nvim-telescope/telescope.nvim',
+      -- OR 'ibhagwan/fzf-lua',
+      'nvim-tree/nvim-web-devicons',
+    },
+    config = function()
+      require('octo').setup()
+    end,
+  },
   -- NOTE: Plugins can also be configured to run Lua code when they are loaded.
   --
   -- This is often very useful to both group configuration, as well as handle
@@ -717,26 +729,44 @@ require('lazy').setup({
 
       -- REQUIRED
       harpoon:setup()
-      -- REQUIRED
-      local conf = require('telescope.config').values
       local function toggle_telescope(harpoon_files)
-        local file_paths = {}
-        for _, item in ipairs(harpoon_files.items) do
-          table.insert(file_paths, item.value)
+        local finder = function()
+          local paths = {}
+          for _, item in ipairs(harpoon_files.items) do
+            table.insert(paths, item.value)
+          end
+
+          return require('telescope.finders').new_table {
+            results = paths,
+          }
         end
 
         require('telescope.pickers')
           .new({}, {
             prompt_title = 'Harpoon',
-            finder = require('telescope.finders').new_table {
-              results = file_paths,
+            finder = finder(),
+            previewer = false,
+            sorter = require('telescope.config').values.generic_sorter {},
+            layout_config = {
+              height = 0.4,
+              width = 0.5,
+              prompt_position = 'top',
+              preview_cutoff = 120,
             },
-            previewer = conf.file_previewer {},
-            sorter = conf.generic_sorter {},
+            attach_mappings = function(prompt_bufnr, map)
+              map('i', '<C-d>', function()
+                local state = require 'telescope.actions.state'
+                local selected_entry = state.get_selected_entry()
+                local current_picker = state.get_current_picker(prompt_bufnr)
+
+                table.remove(harpoon_files.items, selected_entry.index)
+                current_picker:refresh(finder())
+              end)
+              return true
+            end,
           })
           :find()
       end
-
       vim.keymap.set('n', '<C-e>', function()
         toggle_telescope(harpoon:list())
       end, { desc = 'Open harpoon window' })
@@ -765,24 +795,35 @@ require('lazy').setup({
       end)
     end,
   },
-
-  { -- You can easily change to a different colorscheme.
-    --   -- Change the name of the colorscheme plugin below, and then
-    --   -- change the command in the config to whatever the name of that colorscheme is.
-    --   --
-    --   -- If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`.
-    'folke/tokyonight.nvim',
-    priority = 1000, -- Make sure to load this before all the other start plugins.
-    init = function()
-      -- Load the colorscheme here.
-      -- Like many other themes, this one has different styles, and you could load
-      -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
-      vim.cmd.colorscheme 'tokyonight-night'
-
-      -- You can configure highlights by doing something like:
-      vim.cmd.hi 'Comment gui=none'
+  {
+    'sainnhe/sonokai',
+    lazy = false,
+    priority = 1000,
+    config = function()
+      -- Optionally configure and load the colorscheme
+      -- directly inside the plugin declaration.
+      vim.g.sonokai_enable_italic = true
+      vim.g.sonokai_style = 'atlantis'
+      vim.cmd.colorscheme 'sonokai'
     end,
   },
+  -- { -- You can easily change to a different colorscheme.
+  --   --   -- Change the name of the colorscheme plugin below, and then
+  --   --   -- change the command in the config to whatever the name of that colorscheme is.
+  --   --   --
+  --   --   -- If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`.
+  --   'folke/tokyonight.nvim',
+  --   priority = 1000, -- Make sure to load this before all the other start plugins.
+  --   init = function()
+  --     -- Load the colorscheme here.
+  --     -- Like many other themes, this one has different styles, and you could load
+  --     -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
+  --     vim.cmd.colorscheme 'tokyonight-night'
+  --
+  --     -- You can configure highlights by doing something like:
+  --     vim.cmd.hi 'Comment gui=none'
+  --   end,
+  -- },
   -- { 'catppuccin/nvim', name = 'catppuccin', lazy = false, priority = 1000 },
   -- {
   --   'scottmckendry/cyberdream.nvim',
@@ -946,3 +987,5 @@ require('lazy').setup({
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
+--
+--
