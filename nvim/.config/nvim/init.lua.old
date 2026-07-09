@@ -1,3 +1,4 @@
+require 'config.remap'
 -- Set <space> as the leader key
 -- See `:help mapleader`
 --  NOTE: Must happen before plugins are loaded (otherwise wrong leader will be used)
@@ -185,9 +186,6 @@ require('lazy').setup({
 
   -- Personal plugin
   {
-    'github/copilot.vim',
-  },
-  {
     'ldelossa/gh.nvim',
     dependencies = {
       {
@@ -212,6 +210,7 @@ require('lazy').setup({
           typescript = { 'prettierd', 'prettier' },
           yaml = { 'prettierd', 'prettier' },
           typescriptreact = { 'prettierd' },
+          go = { 'gopls' },
         },
         format_on_save = {
           -- These options will be passed to conform.format()
@@ -956,7 +955,6 @@ require('lazy').setup({
   require 'kickstart.plugins.debug',
   require 'kickstart.plugins.indent_line',
   require 'kickstart.plugins.lint',
-
   -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
   --    This is the easiest way to modularize your config.
   --
