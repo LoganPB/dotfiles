@@ -229,10 +229,10 @@ do
   --  Use CTRL+<hjkl> to switch between windows
   --
   --  See `:help wincmd` for a list of all window commands
-  vim.keymap.set('n', '<C-h>', '<C-w><C-h>', { desc = 'Move focus to the left window' })
-  vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right window' })
-  vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
-  vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
+  -- vim.keymap.set('n', '<C-h>', '<C-w><C-h>', { desc = 'Move focus to the left window' })
+  -- vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right window' })
+  -- vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
+  -- vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
 
   -- NOTE: Some terminals have colliding keymaps or are not able to send distinct keycodes
   -- vim.keymap.set("n", "<C-S-h>", "<C-w>H", { desc = "Move window to the left" })
@@ -970,8 +970,51 @@ do
   -- require 'kickstart.plugins.indent_line'
   -- require 'kickstart.plugins.lint'
   -- require 'kickstart.plugins.autopairs'
-  -- require 'kickstart.plugins.neo-tree'
+  --
+  vim.pack.add({
+  {
+    src = 'https://github.com/nvim-neo-tree/neo-tree.nvim',
+    version = vim.version.range('3')
+  },
+  -- dependencies
+  "https://github.com/nvim-lua/plenary.nvim",
+  "https://github.com/MunifTanjim/nui.nvim",
+  -- optional, but recommended
+  "https://github.com/nvim-tree/nvim-web-devicons",
+})
+  vim.keymap.set('n', '<leader>no', '<cmd>:Neotree filesystem reveal left<CR>')
+  vim.keymap.set('n', '<leader>nc', '<cmd>:Neotree filesystem close<CR>')
+  --
+  vim.pack.add { gh 'mrjones2014/smart-splits.nvim'}
+  ---@diagnostic disable-next-line: missing-fields
+  require('smart-splits').setup({
+  -- set_default_multiplexer = 'wezterm',  ← supprime cette ligne
+  ignored_buftypes = {
+    'nofile',
+    'quickfix',
+    'prompt',
+  },
+  ignored_filetypes = { 'NvimTree' },
+  default_amount = 3,
+  at_edge = 'wrap',
+  float_win_behavior = 'previous',
+  move_cursor_same_row = false,
+  cursor_follows_swapped_bufs = false,
+  ignored_events = {
+    'BufEnter',
+    'WinEnter',
+  },
+  multiplexer_integration = 'wezterm',  -- c'est celle-ci qui compte
+  disable_multiplexer_nav_when_zoomed = true,
+  log_level = 'info',
+})
+
+vim.keymap.set('n', '<C-h>', require('smart-splits').move_cursor_left, { desc = 'Move focus left' })
+vim.keymap.set('n', '<C-j>', require('smart-splits').move_cursor_down, { desc = 'Move focus down' })
+vim.keymap.set('n', '<C-k>', require('smart-splits').move_cursor_up, { desc = 'Move focus up' })
+vim.keymap.set('n', '<C-l>', require('smart-splits').move_cursor_right, { desc = 'Move focus right' })
   -- require 'kickstart.plugins.gitsigns' -- adds gitsigns recommended keymaps
+  --
 
   -- NOTE: You can add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
   --
